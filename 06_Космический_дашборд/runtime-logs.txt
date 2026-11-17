@@ -1,0 +1,11 @@
+rust_iss       | [2m2026-11-17T20:49:21.942085Z[0m [32m INFO[0m [2msqlx::postgres::notice[0m[2m:[0m relation "iss_fetch_log" already exists, skipping
+pascal_legacy  | COPY 1
+rust_iss       | [2m2026-11-17T20:49:22.081676Z[0m [32m INFO[0m [2mrust_iss[0m[2m:[0m rust_iss listening on 0.0.0.0:3000
+rust_iss       | [2m2026-11-17T20:49:26.423788Z[0m [31mERROR[0m [2mrust_iss[0m[2m:[0m osdr err UPSTREAM_502
+pascal_legacy  | Imported telemetry_20261117_205000.csv
+pascal_legacy  | COPY 1
+pascal_legacy  | Imported telemetry_20261117_205500.csv
+rust_iss       | [2m2026-11-17T20:49:47.829688Z[0m [31mERROR[0m [2mrust_iss[0m[2m:[0m spacex err UPSTREAM_TIMEOUT
+rust_iss       | [2m2026-11-17T20:49:50.438862Z[0m [31mERROR[0m [2mrust_iss[0m[2m:[0m apod err UPSTREAM_403
+rust_iss       | [2m2026-11-17T20:49:50.692725Z[0m [31mERROR[0m [2mrust_iss[0m[2m:[0m donki err UPSTREAM_403
+rust_iss       | [2m2026-11-17T20:49:50.912372Z[0m [31mERROR[0m [2mrust_iss[0m[2m:[0m neo err UPSTREAM_403

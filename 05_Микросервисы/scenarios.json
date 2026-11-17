@@ -1,0 +1,433 @@
+[
+  {
+    "name": "Create user",
+    "method": "POST",
+    "path": "/users",
+    "status": 201,
+    "body": {
+      "name": "Student",
+      "email": "student@example.test"
+    },
+    "checks": [
+      "body.name === \"Student\""
+    ],
+    "save": {
+      "userId": "id"
+    }
+  },
+  {
+    "name": "List users",
+    "method": "GET",
+    "path": "/users",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "Array.isArray(body)",
+      "body.some(x=>x.id === Number(vars.userId))"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read user cold",
+    "method": "GET",
+    "path": "/users/{{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.id === Number(vars.userId)"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read user cached",
+    "method": "GET",
+    "path": "/users/{{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "headers.get(\"x-cache\") === \"HIT\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Update user invalidates cache",
+    "method": "PUT",
+    "path": "/users/{{userId}}",
+    "status": 200,
+    "body": {
+      "name": "Updated"
+    },
+    "checks": [
+      "body.name === \"Updated\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read updated user",
+    "method": "GET",
+    "path": "/users/{{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.name === \"Updated\"",
+      "headers.get(\"x-cache\") === \"MISS\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Create order",
+    "method": "POST",
+    "path": "/orders",
+    "status": 201,
+    "body": {
+      "userId": "{{userId}}",
+      "product": "Book",
+      "amount": 150
+    },
+    "checks": [],
+    "save": {
+      "orderId": "id"
+    }
+  },
+  {
+    "name": "List orders",
+    "method": "GET",
+    "path": "/orders",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "Array.isArray(body)"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Filter orders",
+    "method": "GET",
+    "path": "/orders?userId={{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.some(x=>x.id === Number(vars.orderId))",
+      "body.every(x=>x.userId === Number(vars.userId))"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read order",
+    "method": "GET",
+    "path": "/orders/{{orderId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.product === \"Book\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read order cached",
+    "method": "GET",
+    "path": "/orders/{{orderId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "headers.get(\"x-cache\") === \"HIT\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Update order",
+    "method": "PUT",
+    "path": "/orders/{{orderId}}",
+    "status": 200,
+    "body": {
+      "userId": "{{userId}}",
+      "product": "Notebook",
+      "amount": 200
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Read updated order",
+    "method": "GET",
+    "path": "/orders/{{orderId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.amount === 200"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Aggregate user and orders",
+    "method": "GET",
+    "path": "/users/{{userId}}/details",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.user.id === Number(vars.userId)",
+      "body.orders.some(x=>x.id === Number(vars.orderId))"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Create payment method",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 201,
+    "body": {
+      "userId": "{{userId}}",
+      "type": "card",
+      "lastFour": "1234",
+      "expiresAt": "2099-12"
+    },
+    "checks": [],
+    "save": {
+      "paymentId": "id"
+    }
+  },
+  {
+    "name": "List payment methods",
+    "method": "GET",
+    "path": "/payment-methods?userId={{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.some(x=>x.id === Number(vars.paymentId))"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Read payment method",
+    "method": "GET",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.lastFour === \"1234\"",
+      "!(\"cvv\" in body)"
+    ],
+    "save": {}
+  },
+  {
+    "name": "Payment cache",
+    "method": "GET",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "headers.get(\"x-cache\") === \"HIT\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Update payment method",
+    "method": "PUT",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 200,
+    "body": {
+      "lastFour": "5678"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Read updated payment",
+    "method": "GET",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 200,
+    "body": null,
+    "checks": [
+      "body.lastFour === \"5678\""
+    ],
+    "save": {}
+  },
+  {
+    "name": "Reject invalid payment {'type': 'cash'}",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 400,
+    "body": {
+      "userId": "{{userId}}",
+      "type": "cash",
+      "lastFour": "1234",
+      "expiresAt": "2099-12"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Reject invalid payment {'lastFour': '12'}",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 400,
+    "body": {
+      "userId": "{{userId}}",
+      "type": "card",
+      "lastFour": "12",
+      "expiresAt": "2099-12"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Reject invalid payment {'expiresAt': '2000-01'}",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 400,
+    "body": {
+      "userId": "{{userId}}",
+      "type": "card",
+      "lastFour": "1234",
+      "expiresAt": "2000-01"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Reject invalid payment {'cvv': '123'}",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 400,
+    "body": {
+      "userId": "{{userId}}",
+      "type": "card",
+      "lastFour": "1234",
+      "expiresAt": "2099-12",
+      "cvv": "123"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Reject missing user",
+    "method": "POST",
+    "path": "/payment-methods",
+    "status": 404,
+    "body": {
+      "userId": 2147483647,
+      "type": "card",
+      "lastFour": "1234",
+      "expiresAt": "2099-12"
+    },
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /health",
+    "method": "GET",
+    "path": "/health",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /status",
+    "method": "GET",
+    "path": "/status",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /users/health",
+    "method": "GET",
+    "path": "/users/health",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /users/status",
+    "method": "GET",
+    "path": "/users/status",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /orders/health",
+    "method": "GET",
+    "path": "/orders/health",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Health /orders/status",
+    "method": "GET",
+    "path": "/orders/status",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Delete payment",
+    "method": "DELETE",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Payment deleted",
+    "method": "GET",
+    "path": "/payment-methods/{{paymentId}}",
+    "status": 404,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Delete order",
+    "method": "DELETE",
+    "path": "/orders/{{orderId}}",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Order deleted",
+    "method": "GET",
+    "path": "/orders/{{orderId}}",
+    "status": 404,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Delete user",
+    "method": "DELETE",
+    "path": "/users/{{userId}}",
+    "status": 200,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "User deleted",
+    "method": "GET",
+    "path": "/users/{{userId}}",
+    "status": 404,
+    "body": null,
+    "checks": [],
+    "save": {}
+  },
+  {
+    "name": "Missing user details",
+    "method": "GET",
+    "path": "/users/{{userId}}/details",
+    "status": 404,
+    "body": null,
+    "checks": [],
+    "save": {}
+  }
+]

@@ -1,0 +1,102 @@
+ Container iss_db Running 
+ Image space-dashboard-rust_tests Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 870B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 764B 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/rust:1-bookworm
+#3 ...
+
+#4 [auth] library/rust:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/rust:1-bookworm
+#3 DONE 2.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 1/7] FROM docker.io/library/rust:1-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 resolve docker.io/library/rust:1-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 350B done
+#7 DONE 0.0s
+
+#8 [build 4/7] COPY Cargo.toml Cargo.lock ./
+#8 CACHED
+
+#9 [build 6/7] COPY src ./src
+#9 CACHED
+
+#10 [build 2/7] RUN apt-get update && apt-get install -y --no-install-recommends pkg-config libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [build 3/7] WORKDIR /app
+#11 CACHED
+
+#12 [build 5/7] RUN mkdir -p src && printf 'fn main() {}' > src/main.rs && cargo fetch --locked
+#12 CACHED
+
+#13 [build 7/7] RUN cargo build --locked --release
+#13 CACHED
+
+#14 exporting to image
+#14 exporting layers
+#14 exporting layers 19.7s done
+#14 exporting manifest sha256:883fec0eea16653826feda1885428e2c861136fefcd03e813259689174760265 0.0s done
+#14 exporting config sha256:0dc94ea322b9d00173d6609907102fb09335441b2077cd70cf33782116e6d325 0.0s done
+#14 exporting attestation manifest sha256:81edf2da2000f6b7a5f0c6a94e29f8c55838191d5e8804e47cf0792ad801e611 0.0s done
+#14 exporting manifest list sha256:1c85c8458ac4a2b1f2af6829a0d6853e353b0d555187dd172cad39b21b4973aa 0.0s done
+#14 naming to docker.io/library/space-dashboard-rust_tests:latest
+#14 naming to docker.io/library/space-dashboard-rust_tests:latest done
+#14 unpacking to docker.io/library/space-dashboard-rust_tests:latest
+#14 unpacking to docker.io/library/space-dashboard-rust_tests:latest 9.5s done
+#14 DONE 29.3s
+
+#15 resolving provenance for metadata file
+#15 DONE 0.0s
+ Image space-dashboard-rust_tests Built 
+ Container iss_db Waiting 
+ Container iss_db Healthy 
+ Container space-dashboard-rust_tests-run-5b03981850df Creating 
+ Container space-dashboard-rust_tests-run-5b03981850df Created 
+   Compiling rust_iss v0.1.0 (/app)
+warning: function `cached_space_row` is never used
+  --> src/repo.rs:77:21
+   |
+77 | pub(crate) async fn cached_space_row(pool: &PgPool, src: &str) -> Result<Option<sqlx::postgres::PgRow>, sqlx::Error> {
+   |                     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rust_iss` (bin "rust_iss" test) generated 1 warning
+warning: unused dependency `thiserror`
+  --> Cargo.toml:15:1
+   |
+15 | thiserror = "1"
+   | ^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `thiserror`
+warning: `rust_iss` (manifest) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 3.57s
+     Running unittests src/main.rs (target/release/build/rust_iss/fa580c14823b05e8/out/rust_iss-fa580c14823b05e8)
+
+running 7 tests
+test domain::tests::equator_one_degree ... ok
+test domain::tests::same_coordinates_have_zero_distance ... ok
+test domain::tests::numbers_accept_strings_but_not_missing_values ... ok
+test error::tests::internal_details_do_not_become_error_code ... ok
+test error::tests::business_error_uses_http_200 ... ok
+test repo::integration_tests::advisory_lock_prevents_overlap_and_is_released ... ok
+test repo::integration_tests::osdr_upsert_keeps_one_row_and_utc_timestamp ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

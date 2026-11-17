@@ -1,0 +1,23 @@
+﻿// вариант 6: вычисление чисел Фибоначчи
+
+using System;
+using System.Diagnostics;
+
+class Program
+{
+    static int Fibonacci(int n)
+    {
+        if (n <= 1) return n;
+        return Fibonacci(n - 1) + Fibonacci(n - 2);
+    }
+
+    static void Main()
+    {
+        int n = 35;
+        Stopwatch sw = Stopwatch.StartNew();
+        int result = Fibonacci(n);
+        sw.Stop();
+        Console.WriteLine($"Fibonacci({n}) = {result}");
+        Console.WriteLine("Время: " + sw.ElapsedMilliseconds + " мс");
+    }
+}

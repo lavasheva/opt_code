@@ -1,0 +1,1163 @@
+{
+  "info": {
+    "name": "Variant 6 Users Orders Payment Methods",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create user",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/users",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"Student\", \"email\": \"student@example.test\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.collectionVariables.set(\"userId\",body.id);",
+              "pm.test(\"body.name === \\\"Student\\\"\",()=>pm.expect(body.name === \"Student\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List users",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"Array.isArray(body)\",()=>pm.expect(Array.isArray(body)).to.equal(true));",
+              "pm.test(\"body.some(x=>x.id === Number(vars.userId))\",()=>pm.expect(body.some(x=>x.id === Number(vars.userId))).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read user cold",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.id === Number(vars.userId)\",()=>pm.expect(body.id === Number(vars.userId)).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read user cached",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"headers.get(\\\"x-cache\\\") === \\\"HIT\\\"\",()=>pm.expect(headers.get(\"x-cache\") === \"HIT\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update user invalidates cache",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"Updated\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.name === \\\"Updated\\\"\",()=>pm.expect(body.name === \"Updated\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read updated user",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.name === \\\"Updated\\\"\",()=>pm.expect(body.name === \"Updated\").to.equal(true));",
+              "pm.test(\"headers.get(\\\"x-cache\\\") === \\\"MISS\\\"\",()=>pm.expect(headers.get(\"x-cache\") === \"MISS\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create order",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/orders",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"product\": \"Book\", \"amount\": 150}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.collectionVariables.set(\"orderId\",body.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List orders",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"Array.isArray(body)\",()=>pm.expect(Array.isArray(body)).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Filter orders",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders?userId={{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.some(x=>x.id === Number(vars.orderId))\",()=>pm.expect(body.some(x=>x.id === Number(vars.orderId))).to.equal(true));",
+              "pm.test(\"body.every(x=>x.userId === Number(vars.userId))\",()=>pm.expect(body.every(x=>x.userId === Number(vars.userId))).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read order",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.product === \\\"Book\\\"\",()=>pm.expect(body.product === \"Book\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read order cached",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"headers.get(\\\"x-cache\\\") === \\\"HIT\\\"\",()=>pm.expect(headers.get(\"x-cache\") === \"HIT\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update order",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"product\": \"Notebook\", \"amount\": 200}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read updated order",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.amount === 200\",()=>pm.expect(body.amount === 200).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aggregate user and orders",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}/details",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.user.id === Number(vars.userId)\",()=>pm.expect(body.user.id === Number(vars.userId)).to.equal(true));",
+              "pm.test(\"body.orders.some(x=>x.id === Number(vars.orderId))\",()=>pm.expect(body.orders.some(x=>x.id === Number(vars.orderId))).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create payment method",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"type\": \"card\", \"lastFour\": \"1234\", \"expiresAt\": \"2099-12\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.collectionVariables.set(\"paymentId\",body.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List payment methods",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/payment-methods?userId={{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.some(x=>x.id === Number(vars.paymentId))\",()=>pm.expect(body.some(x=>x.id === Number(vars.paymentId))).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read payment method",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.lastFour === \\\"1234\\\"\",()=>pm.expect(body.lastFour === \"1234\").to.equal(true));",
+              "pm.test(\"!(\\\"cvv\\\" in body)\",()=>pm.expect(!(\"cvv\" in body)).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment cache",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"headers.get(\\\"x-cache\\\") === \\\"HIT\\\"\",()=>pm.expect(headers.get(\"x-cache\") === \"HIT\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update payment method",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"lastFour\": \"5678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read updated payment",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};",
+              "pm.test(\"body.lastFour === \\\"5678\\\"\",()=>pm.expect(body.lastFour === \"5678\").to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject invalid payment {'type': 'cash'}",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"type\": \"cash\", \"lastFour\": \"1234\", \"expiresAt\": \"2099-12\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject invalid payment {'lastFour': '12'}",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"type\": \"card\", \"lastFour\": \"12\", \"expiresAt\": \"2099-12\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject invalid payment {'expiresAt': '2000-01'}",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"type\": \"card\", \"lastFour\": \"1234\", \"expiresAt\": \"2000-01\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject invalid payment {'cvv': '123'}",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": {{userId}}, \"type\": \"card\", \"lastFour\": \"1234\", \"expiresAt\": \"2099-12\", \"cvv\": \"123\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject missing user",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/payment-methods",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": 2147483647, \"type\": \"card\", \"lastFour\": \"1234\", \"expiresAt\": \"2099-12\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /status",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/status",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /users/health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/health",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /users/status",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/status",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /orders/health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/health",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health /orders/status",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/status",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete payment",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment deleted",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/payment-methods/{{paymentId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete order",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order deleted",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete user",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "User deleted",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing user details",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}/details",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "const body=pm.response.json();",
+              "const vars=pm.collectionVariables.toObject();",
+              "const headers={get:name=>pm.response.headers.get(name)};"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

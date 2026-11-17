@@ -1,0 +1,7 @@
+Решения\04_Память_Python\original.py:15: size=617 KiB, count=19753, average=32 B
+Решения\04_Память_Python\original.py:17: size=576 KiB, count=2, average=288 KiB
+Решения\04_Память_Python\original.py:9: size=469 KiB, count=20010, average=24 B
+Решения\04_Память_Python\original.py:18: size=2400 B, count=100, average=24 B
+Решения\benchmark_python.py:54: size=112 B, count=3, average=37 B
+Решения\04_Память_Python\original.py:12: size=64 B, count=1, average=64 B
+<USERPROFILE>\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tracemalloc.py:558: size=56 B, count=1, average=56 B

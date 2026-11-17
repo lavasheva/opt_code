@@ -1,0 +1,38 @@
+PASS Create user: HTTP 201
+PASS List users: HTTP 200
+PASS Read user cold: HTTP 200
+PASS Read user cached: HTTP 200
+PASS Update user invalidates cache: HTTP 200
+PASS Read updated user: HTTP 200
+PASS Create order: HTTP 201
+PASS List orders: HTTP 200
+PASS Filter orders: HTTP 200
+PASS Read order: HTTP 200
+PASS Read order cached: HTTP 200
+PASS Update order: HTTP 200
+PASS Read updated order: HTTP 200
+PASS Aggregate user and orders: HTTP 200
+PASS Create payment method: HTTP 201
+PASS List payment methods: HTTP 200
+PASS Read payment method: HTTP 200
+PASS Payment cache: HTTP 200
+PASS Update payment method: HTTP 200
+PASS Read updated payment: HTTP 200
+PASS Reject invalid payment {'type': 'cash'}: HTTP 400
+PASS Reject invalid payment {'lastFour': '12'}: HTTP 400
+PASS Reject invalid payment {'expiresAt': '2000-01'}: HTTP 400
+PASS Reject invalid payment {'cvv': '123'}: HTTP 400
+PASS Reject missing user: HTTP 404
+PASS Health /health: HTTP 200
+PASS Health /status: HTTP 200
+PASS Health /users/health: HTTP 200
+PASS Health /users/status: HTTP 200
+PASS Health /orders/health: HTTP 200
+PASS Health /orders/status: HTTP 200
+PASS Delete payment: HTTP 200
+PASS Payment deleted: HTTP 404
+PASS Delete order: HTTP 200
+PASS Order deleted: HTTP 404
+PASS Delete user: HTTP 200
+PASS User deleted: HTTP 404
+PASS Missing user details: HTTP 404

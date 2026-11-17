@@ -1,0 +1,8 @@
+PASS Unavailable orders return 503, attempt 1
+PASS Unavailable orders return 503, attempt 2
+PASS Unavailable orders return 503, attempt 3
+PASS Unavailable orders return 503, attempt 4
+PASS Orders circuit is open
+PASS Users remain available
+PASS Orders recover after restart
+PASS Orders circuit closes after recovery

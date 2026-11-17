@@ -1,0 +1,15 @@
+Filename: Решения\04_Память_Python\optimized.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    11     27.3 MiB     27.3 MiB           1   def run_with_growing_cache(n: int) -> tuple[int, float]:
+    12     27.3 MiB      0.0 MiB           1       total = 0.0
+    13     27.3 MiB      0.0 MiB        1001       for i in range(n):
+    14     27.3 MiB      0.0 MiB        1000           key = i % (n // 2 + 10)
+    15     27.3 MiB      0.0 MiB        1000           total += expensive_calc(key % 500)
+    16                                             # Исходник добавлял по одному hist_i и по одной записи на каждый уникальный key.
+    17                                             # Словарь снаружи недоступен, поэтому его размер можно посчитать без хранения.
+    18     27.3 MiB      0.0 MiB           1       count = n + min(n, n // 2 + 10) if n > 0 else 0
+    19     27.3 MiB      0.0 MiB           1       return count, total
+
+

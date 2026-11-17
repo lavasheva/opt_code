@@ -1,0 +1,219 @@
+Unable to find image 'postman/newman:alpine' locally
+alpine: Pulling from postman/newman
+eee371b9ce3f: Pulling fs layer
+93b3025fe103: Pulling fs layer
+e8d77df97bba: Pulling fs layer
+d9059661ce70: Pulling fs layer
+950c5e76b10c: Pulling fs layer
+7264a8db6415: Pulling fs layer
+7264a8db6415: Download complete
+eee371b9ce3f: Download complete
+d9059661ce70: Download complete
+e8d77df97bba: Download complete
+93b3025fe103: Download complete
+7264a8db6415: Pull complete
+2b4b48d1cd1c: Download complete
+950c5e76b10c: Download complete
+eee371b9ce3f: Pull complete
+d9059661ce70: Pull complete
+93b3025fe103: Pull complete
+950c5e76b10c: Pull complete
+e8d77df97bba: Pull complete
+Digest: sha256:d9b5e780ead0026bbb37f3759cd7b10fc8a88cd4030c8266a7c5e343d75a5198
+Status: Downloaded newer image for postman/newman:alpine
+newman
+
+Variant 6 Users Orders Payment Methods
+
+Root Create user
+  POST http://api_gateway:8000/users [201 Created, 311B, 203ms]
+  Pass  HTTP 201
+  Pass  body.name === "Student"
+
+Root List users
+  GET http://api_gateway:8000/users [200 OK, 308B, 30ms]
+  Pass  HTTP 200
+  Pass  Array.isArray(body)
+  Pass  body.some(x=>x.id === Number(vars.userId))
+
+Root Read user cold
+  GET http://api_gateway:8000/users/2 [200 OK, 306B, 32ms]
+  Pass  HTTP 200
+  Pass  body.id === Number(vars.userId)
+
+Root Read user cached
+  GET http://api_gateway:8000/users/2 [200 OK, 305B, 62ms]
+  Pass  HTTP 200
+  Pass  headers.get("x-cache") === "HIT"
+
+Root Update user invalidates cache
+  PUT http://api_gateway:8000/users/2 [200 OK, 306B, 71ms]
+  Pass  HTTP 200
+  Pass  body.name === "Updated"
+
+Root Read updated user
+  GET http://api_gateway:8000/users/2 [200 OK, 306B, 28ms]
+  Pass  HTTP 200
+  Pass  body.name === "Updated"
+  Pass  headers.get("x-cache") === "MISS"
+
+Root Create order
+  POST http://api_gateway:8000/orders [201 Created, 304B, 71ms]
+  Pass  HTTP 201
+
+Root List orders
+  GET http://api_gateway:8000/orders [200 OK, 301B, 25ms]
+  Pass  HTTP 200
+  Pass  Array.isArray(body)
+
+Root Filter orders
+  GET http://api_gateway:8000/orders?userId=2 [200 OK, 301B, 36ms]
+  Pass  HTTP 200
+  Pass  body.some(x=>x.id === Number(vars.orderId))
+  Pass  body.every(x=>x.userId === Number(vars.userId))
+
+Root Read order
+  GET http://api_gateway:8000/orders/2 [200 OK, 299B, 25ms]
+  Pass  HTTP 200
+  Pass  body.product === "Book"
+
+Root Read order cached
+  GET http://api_gateway:8000/orders/2 [200 OK, 298B, 22ms]
+  Pass  HTTP 200
+  Pass  headers.get("x-cache") === "HIT"
+
+Root Update order
+  PUT http://api_gateway:8000/orders/2 [200 OK, 303B, 35ms]
+  Pass  HTTP 200
+
+Root Read updated order
+  GET http://api_gateway:8000/orders/2 [200 OK, 303B, 21ms]
+  Pass  HTTP 200
+  Pass  body.amount === 200
+
+Root Aggregate user and orders
+  GET http://api_gateway:8000/users/2/details [200 OK, 366B, 20ms]
+  Pass  HTTP 200
+  Pass  body.user.id === Number(vars.userId)
+  Pass  body.orders.some(x=>x.id === Number(vars.orderId))
+
+Root Create payment method
+  POST http://api_gateway:8000/payment-methods [201 Created, 328B, 93ms]
+  Pass  HTTP 201
+
+Root List payment methods
+  GET http://api_gateway:8000/payment-methods?userId=2 [200 OK, 325B, 29ms]
+  Pass  HTTP 200
+  Pass  body.some(x=>x.id === Number(vars.paymentId))
+
+Root Read payment method
+  GET http://api_gateway:8000/payment-methods/2 [200 OK, 323B, 36ms]
+  Pass  HTTP 200
+  Pass  body.lastFour === "1234"
+  Pass  !("cvv" in body)
+
+Root Payment cache
+  GET http://api_gateway:8000/payment-methods/2 [200 OK, 322B, 11ms]
+  Pass  HTTP 200
+  Pass  headers.get("x-cache") === "HIT"
+
+Root Update payment method
+  PUT http://api_gateway:8000/payment-methods/2 [200 OK, 323B, 43ms]
+  Pass  HTTP 200
+
+Root Read updated payment
+  GET http://api_gateway:8000/payment-methods/2 [200 OK, 323B, 24ms]
+  Pass  HTTP 200
+  Pass  body.lastFour === "5678"
+
+Root Reject invalid payment {'type': 'cash'}
+  POST http://api_gateway:8000/payment-methods [400 Bad Request, 283B, 15ms]
+  Pass  HTTP 400
+
+Root Reject invalid payment {'lastFour': '12'}
+  POST http://api_gateway:8000/payment-methods [400 Bad Request, 301B, 26ms]
+  Pass  HTTP 400
+
+Root Reject invalid payment {'expiresAt': '2000-01'}
+  POST http://api_gateway:8000/payment-methods [400 Bad Request, 293B, 27ms]
+  Pass  HTTP 400
+
+Root Reject invalid payment {'cvv': '123'}
+  POST http://api_gateway:8000/payment-methods [400 Bad Request, 288B, 26ms]
+  Pass  HTTP 400
+
+Root Reject missing user
+  POST http://api_gateway:8000/payment-methods [404 Not Found, 283B, 28ms]
+  Pass  HTTP 404
+
+Root Health /health
+  GET http://api_gateway:8000/health [200 OK, 1.4kB, 11ms]
+  Pass  HTTP 200
+
+Root Health /status
+  GET http://api_gateway:8000/status [200 OK, 270B, 8ms]
+  Pass  HTTP 200
+
+Root Health /users/health
+  GET http://api_gateway:8000/users/health [200 OK, 330B, 16ms]
+  Pass  HTTP 200
+
+Root Health /users/status
+  GET http://api_gateway:8000/users/status [200 OK, 287B, 12ms]
+  Pass  HTTP 200
+
+Root Health /orders/health
+  GET http://api_gateway:8000/orders/health [200 OK, 331B, 31ms]
+  Pass  HTTP 200
+
+Root Health /orders/status
+  GET http://api_gateway:8000/orders/status [200 OK, 288B, 12ms]
+  Pass  HTTP 200
+
+Root Delete payment
+  DELETE http://api_gateway:8000/payment-methods/2 [200 OK, 384B, 30ms]
+  Pass  HTTP 200
+
+Root Payment deleted
+  GET http://api_gateway:8000/payment-methods/2 [404 Not Found, 293B, 23ms]
+  Pass  HTTP 404
+
+Root Delete order
+  DELETE http://api_gateway:8000/orders/2 [200 OK, 346B, 33ms]
+  Pass  HTTP 200
+
+Root Order deleted
+  GET http://api_gateway:8000/orders/2 [404 Not Found, 284B, 18ms]
+  Pass  HTTP 404
+
+Root Delete user
+  DELETE http://api_gateway:8000/users/2 [200 OK, 347B, 49ms]
+  Pass  HTTP 200
+
+Root User deleted
+  GET http://api_gateway:8000/users/2 [404 Not Found, 283B, 24ms]
+  Pass  HTTP 404
+
+Root Missing user details
+  GET http://api_gateway:8000/users/2/details [404 Not Found, 268B, 18ms]
+  Pass  HTTP 404
+
+------------------------------------------------------------------
+|                         |          executed |           failed |
+--------------------------+-------------------+-------------------
+|              iterations |                 1 |                0 |
+--------------------------+-------------------+-------------------
+|                requests |                38 |                0 |
+--------------------------+-------------------+-------------------
+|            test-scripts |                38 |                0 |
+--------------------------+-------------------+-------------------
+|      prerequest-scripts |                 0 |                0 |
+--------------------------+-------------------+-------------------
+|              assertions |                59 |                0 |
+------------------------------------------------------------------
+| total run duration: 3s                                         |
+------------------------------------------------------------------
+| total data received: 3.3kB (approx)                            |
+------------------------------------------------------------------
+| average response time: 34ms [min: 8ms, max: 203ms, s.d.: 32ms] |
+------------------------------------------------------------------

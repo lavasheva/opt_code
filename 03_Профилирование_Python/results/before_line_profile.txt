@@ -1,0 +1,50 @@
+Timer unit: 1e-07 s
+
+Total time: 2.32408 s
+File: Решения\03_Профилирование_Python\original.py
+Function: fib at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           def fib(n: int) -> int:
+     6    150049     380697.0      2.5      1.6      if n <= 1:
+     7     75025     188429.0      2.5      0.8          return n
+     8     75024   22671646.0    302.2     97.6      return fib(n - 1) + fib(n - 2)
+
+Total time: 0.0020021 s
+File: Решения\03_Профилирование_Python\original.py
+Function: deep_sum at line 11
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    11                                           def deep_sum(d: dict) -> float:
+    12        85        191.0      2.2      1.0      total = 0.0
+    13        85        205.0      2.4      1.0      if isinstance(d, dict):
+    14       425        959.0      2.3      4.8          for key in d:
+    15       340        742.0      2.2      3.7              val = d[key]
+    16       340        924.0      2.7      4.6              if isinstance(val, (int, float)):
+    17       256        584.0      2.3      2.9                  total += val
+    18        84        221.0      2.6      1.1              elif isinstance(val, (dict, list)):
+    19        84      15838.0    188.5     79.1                  total += deep_sum(val)
+    20                                               elif isinstance(d, list):
+    21                                                   for item in d:
+    22                                                       if isinstance(item, (int, float)):
+    23                                                           total += item
+    24                                                       elif isinstance(item, (dict, list)):
+    25                                                           total += deep_sum(item)
+    26        85        357.0      4.2      1.8      return total
+
+Total time: 0.0008263 s
+File: Решения\03_Профилирование_Python\original.py
+Function: build_dict at line 29
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    29                                           def build_dict(depth: int, breadth: int) -> dict:
+    30        85        209.0      2.5      2.5      if depth <= 0:
+    31        64        927.0     14.5     11.2          return {f"v{i}": random.random() for i in range(breadth)}
+    32        42        169.0      4.0      2.0      return {
+    33        84       6635.0     79.0     80.3          f"node{i}": build_dict(depth - 1, breadth)
+    34       126        323.0      2.6      3.9          for i in range(breadth)
+    35                                               }
+

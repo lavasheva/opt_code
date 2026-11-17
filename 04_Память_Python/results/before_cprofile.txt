@@ -1,0 +1,14 @@
+         7051079 function calls in 1.440 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    1.440    1.440 original.py:22(run_task)
+        1    0.038    0.038    1.439    1.439 original.py:11(run_with_growing_cache)
+    20010    0.016    0.000    1.401    0.000 original.py:7(expensive_calc)
+    20010    0.667    0.000    1.385    0.000 {built-in method builtins.sum}
+  7011055    0.719    0.000    0.719    0.000 original.py:9(<genexpr>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+
+

@@ -1,0 +1,127 @@
+[
+  {
+    "url": "http://localhost:8080/dashboard",
+    "status": 200,
+    "body": "HTML checked"
+  },
+  {
+    "url": "http://localhost:8080/osdr",
+    "status": 200,
+    "body": "HTML checked"
+  },
+  {
+    "url": "http://localhost:8080/page/welcome",
+    "status": 200,
+    "body": "HTML checked"
+  },
+  {
+    "url": "http://localhost:8080/page/unsafe",
+    "status": 200,
+    "body": "HTML checked"
+  },
+  {
+    "url": "http://localhost:8080/api/astro/events?lat=100",
+    "status": 200,
+    "body": {
+      "ok": false,
+      "error": {
+        "code": "INVALID_COORDINATES",
+        "message": "Данные временно недоступны",
+        "trace_id": "847e2c33-9b01-4a83-ade9-9570ef5bd321"
+      }
+    }
+  },
+  {
+    "url": "http://localhost:8080/api/astro/events",
+    "status": 200,
+    "body": {
+      "ok": false,
+      "error": {
+        "code": "MISSING_CREDENTIALS",
+        "message": "Данные временно недоступны",
+        "trace_id": "474d3764-027f-4fa8-9375-864868ee0baa"
+      }
+    }
+  },
+  {
+    "url": "http://localhost:8080/api/jwst/feed",
+    "status": 200,
+    "body": {
+      "ok": false,
+      "error": {
+        "code": "UPSTREAM_401",
+        "message": "Данные временно недоступны",
+        "trace_id": "032fef60-036b-4705-9261-4fcfd39c4063"
+      }
+    }
+  },
+  {
+    "url": "http://localhost:8081/health",
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "now": "2026-11-17T21:02:40.513495341Z"
+    }
+  },
+  {
+    "url": "http://localhost:8081/last",
+    "status": 200,
+    "body": {
+      "fetched_at": "2026-11-17T21:01:42.904955Z",
+      "id": 7,
+      "payload": {
+        "altitude": 420.96575320189,
+        "daynum": 2461362.3761806,
+        "footprint": 4512.3735194266,
+        "id": 25544,
+        "latitude": 27.970924853572,
+        "longitude": 42.469284569185,
+        "name": "iss",
+        "solar_lat": -19.140559879107,
+        "solar_lon": 220.82965072063,
+        "timestamp": 1794949302,
+        "units": "kilometers",
+        "velocity": 27582.483077509,
+        "visibility": "eclipsed"
+      },
+      "source_url": "https://api.wheretheiss.at/v1/satellites/25544"
+    }
+  },
+  {
+    "url": "http://localhost:8081/osdr/list",
+    "status": 200,
+    "body": {
+      "items": []
+    }
+  },
+  {
+    "url": "http://localhost:8081/space/summary",
+    "status": 200,
+    "body": {
+      "apod": {},
+      "cme": {},
+      "flr": {},
+      "iss": {
+        "at": "2026-11-17T21:01:42.904955Z",
+        "payload": {
+          "altitude": 420.96575320189,
+          "daynum": 2461362.3761806,
+          "footprint": 4512.3735194266,
+          "id": 25544,
+          "latitude": 27.970924853572,
+          "longitude": 42.469284569185,
+          "name": "iss",
+          "solar_lat": -19.140559879107,
+          "solar_lon": 220.82965072063,
+          "timestamp": 1794949302,
+          "units": "kilometers",
+          "velocity": 27582.483077509,
+          "visibility": "eclipsed"
+        }
+      },
+      "neo": {},
+      "osdr_count": 0,
+      "spacex": {}
+    }
+  }
+]

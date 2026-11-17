@@ -1,0 +1,11 @@
+
+   PASS  Tests\Feature\SpaceClientTest
+  ✓ success is cached                                                    0.12s  
+  ✓ errors are not cached                                                0.02s  
+  ✓ bad coordinates                                                      0.01s  
+  ✓ cms keeps formatting and removes active content                      0.02s  
+  ✓ jwst failure preserves http 200 error contract                       0.02s  
+
+  Tests:    5 passed (14 assertions)
+  Duration: 0.23s
+

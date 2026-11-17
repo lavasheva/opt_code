@@ -1,0 +1,5 @@
+pytest
+hypothesis
+matplotlib
+line_profiler
+memory_profiler
